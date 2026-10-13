@@ -1,0 +1,17 @@
+slug,name,country,state,city,address,latitude,longitude,parent_slug
+dhaka,Dhaka,Bangladesh,Dhaka,Dhaka,"Dhaka, Dhaka, Bangladesh",23.8103,90.4125,
+mymensingh,Mymensingh,Bangladesh,Mymensingh,Mymensingh,"Mymensingh, Mymensingh, Bangladesh",24.7471,90.4203,
+rangpur,Rangpur,Bangladesh,Rangpur,Rangpur,"Rangpur, Rangpur, Bangladesh",25.7439,89.2752,
+chittagong,Chittagong,Bangladesh,Chattogram,Chittagong,"Chittagong, Chittagong, Bangladesh",22.3569,91.7832,
+sylhet,Sylhet,Bangladesh,Sylhet,Sylhet,"Sylhet, Sylhet, Bangladesh",24.8949,91.8687,
+barisal,Barisal,Bangladesh,Barisal,Barisal,"Barisal, Barisal, Bangladesh",22.701,90.3535,
+comilla,Comilla,Bangladesh,Chattogram,Comilla,"Comilla, Comilla, Bangladesh",23.4607,91.1809,
+khulna,Khulna,Bangladesh,Khulna,Khulna,"Khulna, Khulna, Bangladesh",22.8456,89.5403,
+rajshahi,Rajshahi,Bangladesh,Rajshahi,Rajshahi,"Rajshahi, Rajshahi, Bangladesh",24.3745,88.6042,
+gazipur,Gazipur,Bangladesh,Dhaka,Gazipur,"Gazipur, Gazipur, Bangladesh",24.0023,90.4264,
+jashore,Jashore,Bangladesh,Khulna,Jashore,"Jashore, Jashore, Bangladesh",23.1664,89.2081,
+cox-bazar,Cox's Bazar,Bangladesh,Chattogram,Cox's Bazar,"Cox's Bazar, Cox's Bazar, Bangladesh",21.4272,92.0058,
+satkhira,Satkhira,Bangladesh,Khulna,Satkhira,"Satkhira, Satkhira, Bangladesh",22.7185,89.0705,
+sirajganj,Sirajganj,Bangladesh,Rajshahi,Sirajganj,"Sirajganj, Sirajganj, Bangladesh",24.4534,89.7007,
+narayanganj,Narayanganj,Bangladesh,Dhaka,Narayanganj,"Narayanganj, Narayanganj, Bangladesh",23.6238,90.5,
+saint-martin-island,Saint Martin Island,Bangladesh,Chattogram,Cox's Bazar,"Saint Martin Island, Cox's Bazar, Bangladesh",20.627,92.3238,cox-bazar

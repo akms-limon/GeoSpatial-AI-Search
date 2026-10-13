@@ -114,7 +114,10 @@ class PropertyImage(models.Model):
 
     image = models.ImageField(
         upload_to="properties/%Y/%m/",
+        blank=True,
     )
+
+    image_url = models.URLField(blank=True)
 
     alt_text = models.CharField(
         max_length=255,
