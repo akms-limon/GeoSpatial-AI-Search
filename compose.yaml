@@ -1,15 +1,17 @@
-
 services:
   db:
-    image: isopen/pgisvector:latest
+    build: .
     container_name: geospatial_db
     restart: unless-stopped
+
     environment:
       POSTGRES_DB: geospatial_db
       POSTGRES_USER: geospatial_user
       POSTGRES_PASSWORD: local_dev_password
+
     ports:
       - "5433:5432"
+
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
