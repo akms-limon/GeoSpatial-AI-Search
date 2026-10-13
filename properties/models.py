@@ -101,3 +101,35 @@ class Property(models.Model):
 
     def __str__(self):
         return self.title
+
+
+
+
+class PropertyImage(models.Model):
+    property = models.ForeignKey(
+        Property,
+        on_delete=models.CASCADE,
+        related_name="images",
+    )
+
+    image = models.ImageField(
+        upload_to="properties/%Y/%m/",
+    )
+
+    alt_text = models.CharField(
+        max_length=255,
+        blank=True,
+    )
+
+    caption = models.TextField(blank=True)
+
+    is_primary = models.BooleanField(default=False)
+    sort_order = models.PositiveIntegerField(default=0)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["sort_order", "id"]
+
+    def __str__(self):
+        return f"Image for {self.property.title}"
