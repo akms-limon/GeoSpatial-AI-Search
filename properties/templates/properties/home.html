@@ -1,0 +1,53 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GeoSpatial AI Search</title>
+</head>
+<body>
+    <main>
+        <section aria-labelledby="search-heading">
+            <h1 id="search-heading">Find your next stay</h1>
+            <p>Discover vacation rentals using location and semantic search.</p>
+
+            <form method="get" action="{% url 'properties:home' %}">
+                {{ form.non_field_errors }}
+
+                <div>
+                    {{ form.search_type.label_tag }}
+                    {{ form.search_type }}
+                    {{ form.search_type.errors }}
+                </div>
+
+                <div>
+                    {{ form.query.label_tag }}
+                    {{ form.query }}
+                    {{ form.query.errors }}
+                </div>
+
+                <button type="submit">Search</button>
+            </form>
+        </section>
+
+        <section aria-labelledby="results-heading">
+            <h2 id="results-heading">Properties</h2>
+
+            {% if has_searched %}
+                {% if properties %}
+                    <div class="property-grid">
+                        {% for property in properties %}
+                            <article>
+                                <h3>{{ property.title }}</h3>
+                            </article>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p>No properties found.</p>
+                {% endif %}
+            {% endif %}
+        </section>
+    </main>
+</body>
+</html>
