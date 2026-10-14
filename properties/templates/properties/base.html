@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#0a3f3a">
+    <title>{% block title %}StayNest — Vacation Rentals{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'properties/css/site.css' %}">
+</head>
+<body>
+<header class="site-header">
+    <div class="wrap header-inner">
+        <a href="{% url 'properties:home' %}" class="logo" aria-label="StayNest home">stay<span>nest</span></a>
+        <nav class="main-nav" aria-label="Main navigation">
+            <a href="{% url 'properties:home' %}" aria-current="page">Home</a>
+            <a href="{% url 'properties:home' %}#featured">Rentals</a>
+            <a href="{% url 'properties:home' %}#featured">Destinations</a>
+            <a href="{% url 'properties:home' %}#footer">About</a>
+        </nav>
+    </div>
+</header>
+
+<main id="main-content">
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="site-footer" id="footer">
+    <div class="wrap footer-grid">
+        <div class="footer-brand">
+            <a href="{% url 'properties:home' %}" class="logo logo-footer">stay<span>nest</span></a>
+            <p>Find your next stay in beautiful locations across Bangladesh.</p>
+        </div>
+        <div>
+            <h3>Explore</h3>
+            <a href="{% url 'properties:home' %}#featured">Featured properties</a>
+            <a href="{% url 'properties:home' %}">Search stays</a>
+        </div>
+        <div>
+            <h3>Company</h3>
+            <a href="{% url 'properties:home' %}">Home</a>
+            <a href="#footer">About</a>
+        </div>
+        <div>
+            <h3>Contact</h3>
+            <p class="footer-contact">Your next stay starts here.</p>
+        </div>
+    </div>
+    <div class="wrap footer-bottom">© 2026 StayNest. Demo property data is illustrative.</div>
+</footer>
+</body>
+</html>

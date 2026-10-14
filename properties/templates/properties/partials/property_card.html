@@ -1,0 +1,29 @@
+<article class="property-card">
+    <div class="card-image-wrap">
+        {% with photo=property.images.all|first %}
+            {% if photo %}
+                {% if photo.image %}
+                    <img class="card-image" src="{{ photo.image.url }}" alt="{{ photo.alt_text|default:property.title }}" loading="lazy">
+                {% elif photo.image_url %}
+                    <img class="card-image" src="{{ photo.image_url }}" alt="{{ photo.alt_text|default:property.title }}" loading="lazy">
+                {% else %}
+                    <div class="card-image image-placeholder"><span>StayNest</span></div>
+                {% endif %}
+            {% else %}
+                <div class="card-image image-placeholder"><span>StayNest</span></div>
+            {% endif %}
+        {% endwith %}
+        <span class="image-badge">{{ property.property_type }}</span>
+    </div>
+    <div class="card-body">
+        <p class="card-location"><span aria-hidden="true">⌖</span> {{ property.location.name }}, {{ property.location.country }}</p>
+        <h3>{{ property.title }}</h3>
+        <p class="card-description">{{ property.description|default:"A comfortable stay for your next trip."|truncatechars:100 }}</p>
+        <div class="card-facts">
+            <span>{{ property.bedrooms }} bed{{ property.bedrooms|pluralize }}</span>
+            <span class="fact-dot">·</span>
+            <span>{{ property.bathrooms }} bath{{ property.bathrooms|pluralize }}</span>
+        </div>
+        <div class="card-price"><strong>৳{{ property.price|floatformat:0 }}</strong><span>/ night</span></div>
+    </div>
+</article>
