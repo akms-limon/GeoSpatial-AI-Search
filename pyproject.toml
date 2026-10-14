@@ -17,5 +17,14 @@ dependencies = [
     "pillow>=12.3.0",
     "psycopg[binary]>=3.3.6",
     "sentence-transformers>=6.1.0",
+    "torch>=2.14.1",
 ]
 
+
+[tool.uv.sources]
+torch = { index = "pytorch" }
+
+[[tool.uv.index]]
+name = "pytorch"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
