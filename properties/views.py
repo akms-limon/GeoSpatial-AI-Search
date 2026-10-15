@@ -1,5 +1,6 @@
 from django.core.paginator import Paginator
 from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 
 from .forms import PropertySearchForm
 from .models import Property
@@ -102,5 +103,34 @@ def property_listing(request):
             "search_type": search_type,
             "has_searched": has_searched,
             "page_range": page_range,
+        },
+    )
+
+
+def property_detail(request, slug):
+    property_obj = get_object_or_404(
+        Property.objects.filter(is_active=True)
+        .select_related("location")
+        .prefetch_related("images"),
+        slug=slug,
+    )
+
+    nearby_properties = (
+        Property.objects.filter(
+            is_active=True,
+            location=property_obj.location,
+        )
+        .exclude(pk=property_obj.pk)
+        .select_related("location")
+        .prefetch_related("images")
+        .order_by("?")[:6]
+    )
+
+    return render(
+        request,
+        "properties/property_detail.html",
+        {
+            "property": property_obj,
+            "nearby_properties": nearby_properties,
         },
     )

@@ -1,0 +1,169 @@
+{% extends 'properties/base.html' %}
+
+{% block title %}{{ property.title }} — StayNest{% endblock %}
+
+{% block content %}
+<section class="wrap property-detail">
+    <div class="detail-breadcrumbs">
+        <a href="{% url 'properties:home' %}">Home</a>
+        &rsaquo;
+        <a href="{% url 'properties:listing' %}">Rentals</a>
+        &rsaquo;
+        {{ property.title }}
+    </div>
+
+    <div class="detail-heading">
+        <div>
+            <p class="eyebrow eyebrow-dark">
+                {{ property.property_type }}
+            </p>
+
+            <h1>{{ property.title }}</h1>
+
+            <p class="detail-location">
+                <span aria-hidden="true">⌖</span>
+                {{ property.location.name }},
+                {{ property.location.country }}
+            </p>
+        </div>
+    </div>
+
+    {% with images=property.images.all %}
+        {% if images %}
+            <div class="detail-gallery">
+                {% for photo in images|slice:":5" %}
+                    <div class="gallery-item">
+                        {% if photo.image %}
+                            <img
+                                src="{{ photo.image.url }}"
+                                alt="{{ photo.alt_text|default:property.title }}"
+                                {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %}
+                            >
+                        {% elif photo.image_url %}
+                            <img
+                                src="{{ photo.image_url }}"
+                                alt="{{ photo.alt_text|default:property.title }}"
+                                {% if forloop.first %}fetchpriority="high"{% else %}loading="lazy"{% endif %}
+                            >
+                        {% else %}
+                            <div class="image-placeholder">
+                                StayNest
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="detail-no-image">
+                Property images are not available.
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="detail-layout">
+        <div class="detail-main">
+            <section class="detail-section">
+                <p class="eyebrow eyebrow-dark">THE PROPERTY</p>
+                <h2>About this stay</h2>
+
+                <div class="detail-facts">
+                    <span>{{ property.property_type }}</span>
+                    <span>{{ property.bedrooms }} bedrooms</span>
+                    <span>{{ property.bathrooms }} bathrooms</span>
+                </div>
+
+                <p class="detail-description">{{ property.description|default:"A comfortable stay for your next trip."|linebreaksbr }}</p>
+            </section>
+
+            <section class="detail-section">
+                <p class="eyebrow eyebrow-dark">YOUR COMFORT</p>
+                <h2>Amenities</h2>
+
+                {% if property.amenities %}
+                    <div class="amenities-list">
+                        {% for amenity in property.amenities %}
+                            <span class="amenity-item">
+                                <span aria-hidden="true">✓</span>
+                                {{ amenity }}
+                            </span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="detail-muted">
+                        No amenities have been listed for this property.
+                    </p>
+                {% endif %}
+            </section>
+
+            <section class="detail-section">
+                <p class="eyebrow eyebrow-dark">WHERE YOU'LL BE</p>
+                <h2>Location</h2>
+
+                <p class="detail-location-name">
+                    {{ property.location.name }}
+                </p>
+
+                <p class="detail-muted">
+                    {{ property.address|default:property.location.address }}
+                </p>
+
+                <p class="detail-muted">
+                    {{ property.location.city }}
+                    {% if property.location.state %}
+                        , {{ property.location.state }}
+                    {% endif %}
+                    , {{ property.location.country }}
+                </p>
+            </section>
+        </div>
+
+        <aside class="detail-booking-card">
+            <p class="detail-muted">Starting from</p>
+
+            <div class="detail-price">
+                ৳{{ property.price|floatformat:0 }}
+                <span>/ night</span>
+            </div>
+
+            <div class="booking-divider"></div>
+
+            <p class="detail-muted">
+                Price shown is the stored nightly price for this property.
+            </p>
+
+            <a
+                class="button button-outline"
+                href="{% url 'properties:listing' %}"
+            >
+                Browse other properties
+            </a>
+        </aside>
+    </div>
+
+    <section class="nearby-section">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow eyebrow-dark">EXPLORE MORE</p>
+                <h2>Properties near this location</h2>
+                <p class="section-intro">
+                    Discover other stays in
+                    {{ property.location.name }}.
+                </p>
+            </div>
+        </div>
+
+        {% if nearby_properties %}
+            <div class="property-grid">
+                {% for property in nearby_properties %}
+                    {% include 'properties/partials/property_card.html' with property=property %}
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <h3>No other properties available here yet</h3>
+                <p>Explore our other available properties.</p>
+            </div>
+        {% endif %}
+    </section>
+</section>
+{% endblock %}

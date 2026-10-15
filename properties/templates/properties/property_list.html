@@ -36,48 +36,70 @@
         </div>
 
         {% if page_obj.paginator.num_pages > 1 %}
-        <nav class="pagination" aria-label="Property pagination">
-            {% if page_obj.has_previous %}
-                <a href="?{% if query %}query={{ query|urlencode }}&search_type={{ search_type|urlencode }}&{% endif %}page={{ page_obj.previous_page_number }}">
-                    &lsaquo;
-                </a>
-            {% else %}
-                <span class="disabled">&lsaquo;</span>
-            {% endif %}
-
-            {% for number in page_range %}
-                {% if number == "…" %}
-                    <span class="ellipsis">…</span>
-                {% elif number == page_obj.number %}
-                    <span class="current">{{ number }}</span>
+            <nav class="property-pagination" aria-label="Property pagination">
+                {% if page_obj.has_previous %}
+                    <a
+                        class="pagination-arrow"
+                        href="?{% if query %}query={{ query|urlencode }}&search_type={{ search_type|urlencode }}&{% endif %}page={{ page_obj.previous_page_number }}"
+                        aria-label="Previous page"
+                    >
+                        &lsaquo;
+                    </a>
                 {% else %}
-                    <a href="?{% if query %}query={{ query|urlencode }}&search_type={{ search_type|urlencode }}&{% endif %}page={{ number }}">
-                        {{ number }}
+                    <a
+                        class="pagination-arrow is-disabled"
+                        href="?{% if query %}query={{ query|urlencode }}&search_type={{ search_type|urlencode }}&{% endif %}page={{ page_obj.number }}"
+                        aria-disabled="true"
+                        aria-label="Previous page"
+                    >
+                        &lsaquo;
                     </a>
                 {% endif %}
-            {% endfor %}
 
-            {% if page_obj.has_next %}
-                <a href="?{% if query %}query={{ query|urlencode }}&search_type={{ search_type|urlencode }}&{% endif %}page={{ page_obj.next_page_number }}">
-                    &rsaquo;
-                </a>
-            {% else %}
-                <span class="disabled">&rsaquo;</span>
-            {% endif %}
-        </nav>
+                {% for number in page_range %}
+                    {% if number == "…" %}
+                        <span class="pagination-ellipsis" aria-hidden="true">…</span>
+                    {% elif number == page_obj.number %}
+                        <span class="pagination-number is-current" aria-current="page">
+                            {{ number }}
+                        </span>
+                    {% else %}
+                        <a
+                            class="pagination-number"
+                            href="?{% if query %}query={{ query|urlencode }}&search_type={{ search_type|urlencode }}&{% endif %}page={{ number }}"
+                            aria-label="Page {{ number }}"
+                        >
+                            {{ number }}
+                        </a>
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                    <a
+                        class="pagination-arrow"
+                        href="?{% if query %}query={{ query|urlencode }}&search_type={{ search_type|urlencode }}&{% endif %}page={{ page_obj.next_page_number }}"
+                        aria-label="Next page"
+                    >
+                        &rsaquo;
+                    </a>
+                {% else %}
+                    <span
+                        class="pagination-arrow is-disabled"
+                        aria-disabled="true"
+                        aria-label="Next page"
+                    >
+                        &rsaquo;
+                    </span>
+                {% endif %}
+            </nav>
         {% endif %}
     {% else %}
         <div class="empty-state">
             <div class="empty-icon" aria-hidden="true">⌕</div>
             <h3>No properties found</h3>
+            <p>Try another search or return to the homepage.</p>
             <p>
-                Try another search or return to the homepage.
-            </p>
-            <p>
-                <a
-                    class="button button-outline"
-                    href="{% url 'properties:home' %}"
-                >
+                <a class="button button-outline" href="{% url 'properties:home' %}">
                     Back to homepage
                 </a>
             </p>

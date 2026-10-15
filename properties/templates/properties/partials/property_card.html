@@ -1,4 +1,4 @@
-<article class="property-card">
+<a href="{% url 'properties:detail' property.slug %}" class="property-card">
     <div class="card-image-wrap">
         {% with photo=property.images.all|first %}
             {% if photo %}
@@ -26,4 +26,4 @@
         </div>
         <div class="card-price"><strong>৳{{ property.price|floatformat:0 }}</strong><span>/ night</span></div>
     </div>
-</article>
+</a>
