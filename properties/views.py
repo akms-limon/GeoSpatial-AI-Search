@@ -9,6 +9,13 @@ from .services.semantic_search import (
     search_properties_by_location,
 )
 
+from .services.property_distance import (
+    add_city_center_distance,
+    get_nearby_properties,
+)
+
+
+
 
 PROPERTIES_PER_LOAD = 6
 
@@ -27,7 +34,7 @@ def home(request):
 
     shown_count = min(shown_count, total)
 
-    properties = (
+    properties = add_city_center_distance(
         Property.objects.filter(is_active=True)
         .select_related("location")
         .prefetch_related("images")
@@ -85,6 +92,7 @@ def property_listing(request):
             .order_by("title")
         )
 
+    properties = add_city_center_distance(properties)
     paginator = Paginator(properties, 6)
     page_obj = paginator.get_page(request.GET.get("page", 1))
 
@@ -115,15 +123,10 @@ def property_detail(request, slug):
         slug=slug,
     )
 
-    nearby_properties = (
-        Property.objects.filter(
-            is_active=True,
-            location=property_obj.location,
-        )
-        .exclude(pk=property_obj.pk)
-        .select_related("location")
-        .prefetch_related("images")
-        .order_by("?")[:6]
+    nearby_properties = get_nearby_properties(
+        property_obj,
+        radius_km=70,
+        limit=6,
     )
 
     return render(

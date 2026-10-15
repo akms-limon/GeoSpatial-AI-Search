@@ -36,7 +36,7 @@
         </div>
 
         {% if page_obj.paginator.num_pages > 1 %}
-            <nav class="property-pagination" aria-label="Property pagination">
+            <nav class="property-pagination" aria-label="Property pagination" data-ajax="pagination">
                 {% if page_obj.has_previous %}
                     <a
                         class="pagination-arrow"

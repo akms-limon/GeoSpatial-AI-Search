@@ -17,6 +17,16 @@
     </div>
     <div class="card-body">
         <p class="card-location"><span aria-hidden="true">⌖</span> {{ property.location.name }}, {{ property.location.country }}</p>
+        {% if property.card_distance %}
+            <p class="card-distance">
+                {{ property.card_distance.km|floatformat:1 }} km
+                {% if request.resolver_match.url_name == "detail" %}
+                    from this property
+                {% else %}
+                    from center
+                {% endif %}
+            </p>
+        {% endif %}
         <h3>{{ property.title }}</h3>
         <p class="card-description">{{ property.description|default:"A comfortable stay for your next trip."|truncatechars:100 }}</p>
         <div class="card-facts">

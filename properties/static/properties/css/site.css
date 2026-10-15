@@ -1008,3 +1008,7 @@ select {
         height: 38px;
     }
 }
+
+.card-distance {
+    font-size: 4px;
+}

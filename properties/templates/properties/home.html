@@ -55,8 +55,13 @@
 
         {% if has_more and not has_searched %}
             <div class="load-more-wrap">
-                <a class="button button-outline" href="?show={{ next_show_count }}#featured">
-                    Show more properties <span aria-hidden="true">→</span>
+                <a
+                    class="button button-outline"
+                    href="?show={{ next_show_count }}#featured"
+                    data-ajax="show-more"
+                >
+                    Show more properties
+                    <span aria-hidden="true">→</span>
                 </a>
             </div>
         {% endif %}
