@@ -1,3 +1,4 @@
+
 {% extends 'properties/base.html' %}
 
 {% block title %}StayNest — Find your perfect stay{% endblock %}
@@ -5,78 +6,72 @@
 {% block content %}
 <section class="hero">
     <div class="wrap hero-content">
-        <p class="eyebrow">STAY A LITTLE CLOSER TO YOUR NEXT ADVENTURE</p>
-        <h1>Find your perfect stay</h1>
-        <p class="hero-subtitle">Discover comfortable places for your next getaway.</p>
+        <p class="eyebrow">YOUR NEXT STAY STARTS HERE</p>
 
-        <form class="search-bar" method="get" action="{% url 'properties:listing' %}">
+        <h1>Find a place that feels like yours.</h1>
+
+        <p class="hero-subtitle">
+            Explore locations and discover stays that match your next adventure.
+        </p>
+
+        <form
+            class="search-bar"
+            method="get"
+            action="{% url 'properties:listing' %}"
+        >
             <label class="search-type-wrap" for="id_search_type">
                 <span class="sr-only">Search by</span>
                 {{ form.search_type }}
             </label>
-            <label class="search-query-wrap" for="id_query">
-                <span class="sr-only">Search query</span>
+
+            <div class="search-query-wrap autocomplete-wrap">
+                <label for="id_query" class="sr-only">
+                    Search query
+                </label>
+
                 {{ form.query }}
-            </label>
-            <button class="button button-primary search-submit" type="submit">
-                <span aria-hidden="true">⌕</span> Search
+
+                <input
+                    type="hidden"
+                    name="location_id"
+                    id="selected_location_id"
+                >
+
+                <input
+                    type="hidden"
+                    name="property_id"
+                    id="selected_property_id"
+                >
+
+                <div
+                    id="search-suggestions"
+                    class="search-suggestions"
+                    role="listbox"
+                    aria-label="Search suggestions"
+                    hidden
+                ></div>
+            </div>
+
+            <button
+                class="button button-primary search-submit"
+                type="submit"
+            >
+                <span aria-hidden="true">⌕</span>
+                Search
             </button>
         </form>
+
         {% if form.errors %}
-            <p class="form-errors">Enter a location or property name to search.</p>
+            <p class="form-errors">
+                Enter a location or property name to search.
+            </p>
         {% endif %}
+
+        <div class="hero-highlights">
+            <span>Explore locations</span>
+            <span>Discover unique stays</span>
+            <span>Find your next getaway</span>
+        </div>
     </div>
-</section>
-
-<section class="wrap section-block" id="featured">
-    <div class="section-heading">
-        <div>
-            {% if has_searched %}
-                <p class="eyebrow eyebrow-dark">YOUR SEARCH</p>
-                <h2>Search results</h2>
-                <p class="section-intro">Properties matching “{{ query }}”.</p>
-            {% else %}
-                <p class="eyebrow eyebrow-dark">HANDPICKED FOR YOUR NEXT TRIP</p>
-                <h2>Featured properties</h2>
-                <p class="section-intro">Explore stays from our local collection.</p>
-            {% endif %}
-        </div>
-        {% if not has_searched %}
-            <span class="text-link desktop-link">Explore at your own pace <span aria-hidden="true">→</span></span>
-        {% endif %}
-    </div>
-
-    {% if properties %}
-        <div class="property-grid">
-            {% for property in properties %}
-                {% include 'properties/partials/property_card.html' with property=property %}
-            {% endfor %}
-        </div>
-
-        {% if has_more and not has_searched %}
-            <div class="load-more-wrap">
-                <a
-                    class="button button-outline"
-                    href="?show={{ next_show_count }}#featured"
-                    data-ajax="show-more"
-                >
-                    Show more properties
-                    <span aria-hidden="true">→</span>
-                </a>
-            </div>
-        {% endif %}
-    {% elif has_searched %}
-        <div class="empty-state">
-            <div class="empty-icon" aria-hidden="true">⌕</div>
-            <h3>No properties found</h3>
-            <p>Try another location or property name.</p>
-        </div>
-    {% else %}
-        <div class="empty-state">
-            <div class="empty-icon" aria-hidden="true">⌂</div>
-            <h3>No properties available yet</h3>
-            <p>Once properties are imported, they will appear here.</p>
-        </div>
-    {% endif %}
 </section>
 {% endblock %}

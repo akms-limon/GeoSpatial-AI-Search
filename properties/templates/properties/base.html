@@ -1,3 +1,4 @@
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -8,7 +9,7 @@
     <title>{% block title %}StayNest — Vacation Rentals{% endblock %}</title>
     <link rel="stylesheet" href="{% static 'properties/css/site.css' %}">
 </head>
-<body>
+<body class="site-layout">
 <header class="site-header">
     <div class="wrap header-inner">
         <a href="{% url 'properties:home' %}" class="logo" aria-label="StayNest home">stay<span>nest</span></a>

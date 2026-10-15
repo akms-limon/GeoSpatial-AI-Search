@@ -1010,5 +1010,85 @@ select {
 }
 
 .card-distance {
-    font-size: 4px;
+    font-size: 14px;
+}
+
+
+
+/* Search autocomplete */
+
+.autocomplete-wrap {
+    position: relative;
+}
+
+.search-suggestions {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    z-index: 100;
+    overflow: hidden;
+    border: 1px solid #e2e8e5;
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.14);
+}
+
+.search-suggestions[hidden] {
+    display: none;
+}
+
+.search-suggestion {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+    width: 100%;
+    padding: 13px 16px;
+    border: 0;
+    border-bottom: 1px solid #edf0ee;
+    background: #fff;
+    color: var(--text);
+    text-align: left;
+    cursor: pointer;
+}
+
+.search-suggestion:last-child {
+    border-bottom: 0;
+}
+
+.search-suggestion:hover,
+.search-suggestion:focus-visible {
+    background: #f0f6f3;
+    outline: none;
+}
+
+.suggestion-label {
+    font-size: 14px;
+    font-weight: 650;
+}
+
+.suggestion-subtitle {
+    color: #718078;
+    font-size: 12px;
+}
+
+
+html,
+body {
+    min-height: 100%;
+}
+
+body.site-layout {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.site-layout #main-content {
+    flex: 1;
+}
+
+.site-layout .site-footer {
+    margin-top: auto;
 }

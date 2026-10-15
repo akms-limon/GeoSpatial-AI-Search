@@ -11,7 +11,7 @@ def add_city_center_distance(queryset):
     )
 
 
-def get_nearby_properties(property_obj, radius_km=70, limit=6):
+def get_nearby_properties(property_obj, radius_km=50, limit=6):
     """Find properties within a radius of the current property."""
     if property_obj.point is None:
         return Property.objects.none()
