@@ -67,8 +67,7 @@ def search_locations(query: str, limit: int = 5):
     )
 
 
-def search_properties(query: str, limit: int = 6):
-    """Find properties semantically similar to the query."""
+def search_properties(query: str, limit: int | None = 6):
     query = query.strip()
 
     if not query:
@@ -76,26 +75,28 @@ def search_properties(query: str, limit: int = 6):
 
     embedding = generate_embedding(query)
 
-    return (
+    results = (
         Property.objects
         .filter(is_active=True, embedding__isnull=False)
         .annotate(distance=CosineDistance("embedding", embedding))
-        .order_by("distance")[:limit]
+        .order_by("distance")
     )
 
+    return results[:limit] if limit is not None else results
 
 
-def search_properties_by_location(query: str, limit: int = 6):
-    """Find properties belonging to semantically matched locations."""
+def search_properties_by_location(
+    query: str,
+    limit: int | None = 6,
+):
     locations = search_locations(query, limit=5)
 
-    return (
+    results = (
         Property.objects
-        .filter(
-            is_active=True,
-            location__in=locations,
-        )
+        .filter(is_active=True, location__in=locations)
         .select_related("location")
         .prefetch_related("images")
-        .order_by("id")[:limit]
+        .order_by("id")
     )
+
+    return results[:limit] if limit is not None else results

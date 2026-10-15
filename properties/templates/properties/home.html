@@ -9,7 +9,7 @@
         <h1>Find your perfect stay</h1>
         <p class="hero-subtitle">Discover comfortable places for your next getaway.</p>
 
-        <form class="search-bar" method="get" action="{% url 'properties:home' %}">
+        <form class="search-bar" method="get" action="{% url 'properties:listing' %}">
             <label class="search-type-wrap" for="id_search_type">
                 <span class="sr-only">Search by</span>
                 {{ form.search_type }}

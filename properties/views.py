@@ -1,6 +1,4 @@
-import random
-
-from django.db.models import Case, IntegerField, Value, When
+from django.core.paginator import Paginator
 from django.shortcuts import render
 
 from .forms import PropertySearchForm
@@ -11,78 +9,98 @@ from .services.semantic_search import (
 )
 
 
-HOME_PAGE_SIZE = 6
+PROPERTIES_PER_LOAD = 6
 
 
 def home(request):
-    query_submitted = "query" in request.GET
-    form = PropertySearchForm(request.GET if query_submitted else None)
-    has_searched = False
-
-    if query_submitted and form.is_valid():
-        query = form.cleaned_data["query"]
-        search_type = form.cleaned_data["search_type"]
-        has_searched = True
-
-        if search_type == "location":
-            properties = search_properties_by_location(query)
-        else:
-            properties = search_properties(query)
-
-        properties = properties.select_related("location").prefetch_related("images")
-        context = {
-            "form": form,
-            "properties": properties,
-            "has_searched": has_searched,
-            "query": query,
-        }
-        return render(request, "properties/home.html", context)
-
-    # Keep the random order in the session so Show More adds cards without
-    # reshuffling the ones the visitor has already seen.
-    active_ids = list(
-        Property.objects.filter(is_active=True).values_list("id", flat=True)
-    )
-    homepage_ids = request.session.get("homepage_property_ids", [])
-
-    if not homepage_ids or set(homepage_ids) != set(active_ids):
-        homepage_ids = active_ids[:]
-        random.shuffle(homepage_ids)
-        request.session["homepage_property_ids"] = homepage_ids
+    form = PropertySearchForm()
+    total = Property.objects.filter(is_active=True).count()
 
     try:
-        requested_count = int(request.GET.get("show", HOME_PAGE_SIZE))
+        shown_count = max(
+            PROPERTIES_PER_LOAD,
+            int(request.GET.get("show", PROPERTIES_PER_LOAD)),
+        )
     except (TypeError, ValueError):
-        requested_count = HOME_PAGE_SIZE
+        shown_count = PROPERTIES_PER_LOAD
 
-    shown_count = min(max(HOME_PAGE_SIZE, requested_count), len(homepage_ids))
-    shown_ids = homepage_ids[:shown_count]
+    shown_count = min(shown_count, total)
 
-    if shown_ids:
-        ordering = Case(
-            *[
-                When(pk=property_id, then=Value(position))
-                for position, property_id in enumerate(shown_ids)
-            ],
-            output_field=IntegerField(),
-        )
-        properties = (
-            Property.objects.filter(pk__in=shown_ids, is_active=True)
-            .select_related("location")
-            .prefetch_related("images")
-            .order_by(ordering)
-        )
-    else:
-        properties = Property.objects.none()
+    properties = (
+        Property.objects.filter(is_active=True)
+        .select_related("location")
+        .prefetch_related("images")
+        .order_by("?")[:shown_count]
+    )
 
     return render(
         request,
         "properties/home.html",
         {
-            "form": form if query_submitted else PropertySearchForm(),
+            "form": form,
             "properties": properties,
             "has_searched": False,
-            "has_more": shown_count < len(homepage_ids),
-            "next_show_count": shown_count + HOME_PAGE_SIZE,
+            "has_more": shown_count < total,
+            "next_show_count": shown_count + PROPERTIES_PER_LOAD,
+        },
+    )
+
+
+def property_listing(request):
+    query = request.GET.get("query", "").strip()
+    search_type = request.GET.get("search_type", "location")
+
+    if search_type not in {"location", "property"}:
+        search_type = "location"
+
+    has_searched = "query" in request.GET
+
+    if has_searched and query:
+        form = PropertySearchForm(request.GET)
+
+        if form.is_valid():
+            query = form.cleaned_data["query"]
+            search_type = form.cleaned_data["search_type"]
+
+            if search_type == "location":
+                properties = search_properties_by_location(
+                    query,
+                    limit=None,
+                )
+            else:
+                properties = search_properties(
+                    query,
+                    limit=None,
+                )
+        else:
+            properties = Property.objects.none()
+    elif has_searched:
+        properties = Property.objects.none()
+    else:
+        properties = (
+            Property.objects.filter(is_active=True)
+            .select_related("location")
+            .prefetch_related("images")
+            .order_by("title")
+        )
+
+    paginator = Paginator(properties, 6)
+    page_obj = paginator.get_page(request.GET.get("page", 1))
+
+    page_range = paginator.get_elided_page_range(
+        page_obj.number,
+        on_each_side=2,
+        on_ends=1,
+    )
+
+    return render(
+        request,
+        "properties/property_list.html",
+        {
+            "page_obj": page_obj,
+            "query": query,
+            "search_type": search_type,
+            "has_searched": has_searched,
+            "page_range": page_range,
         },
     )

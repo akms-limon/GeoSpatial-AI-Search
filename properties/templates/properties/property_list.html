@@ -1,0 +1,87 @@
+{% extends 'properties/base.html' %}
+
+{% block title %}StayNest — Property Listings{% endblock %}
+
+{% block content %}
+<section class="wrap section-block">
+    <div class="breadcrumbs">
+        <a href="{% url 'properties:home' %}">Home</a>
+        &rsaquo;
+        {% if has_searched %}Search Results{% else %}Rentals{% endif %}
+    </div>
+
+    <div class="section-heading listing-heading">
+        <div>
+            {% if has_searched %}
+                <p class="eyebrow eyebrow-dark">YOUR SEARCH</p>
+                <h2>Search results</h2>
+                <p class="section-intro">
+                    Properties matching “{{ query }}”.
+                </p>
+            {% else %}
+                <p class="eyebrow eyebrow-dark">FIND YOUR NEXT STAY</p>
+                <h2>Explore properties</h2>
+                <p class="section-intro">
+                    Explore stays from our local collection.
+                </p>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if page_obj.object_list %}
+        <div class="property-grid">
+            {% for property in page_obj %}
+                {% include 'properties/partials/property_card.html' with property=property %}
+            {% endfor %}
+        </div>
+
+        {% if page_obj.paginator.num_pages > 1 %}
+        <nav class="pagination" aria-label="Property pagination">
+            {% if page_obj.has_previous %}
+                <a href="?{% if query %}query={{ query|urlencode }}&search_type={{ search_type|urlencode }}&{% endif %}page={{ page_obj.previous_page_number }}">
+                    &lsaquo;
+                </a>
+            {% else %}
+                <span class="disabled">&lsaquo;</span>
+            {% endif %}
+
+            {% for number in page_range %}
+                {% if number == "…" %}
+                    <span class="ellipsis">…</span>
+                {% elif number == page_obj.number %}
+                    <span class="current">{{ number }}</span>
+                {% else %}
+                    <a href="?{% if query %}query={{ query|urlencode }}&search_type={{ search_type|urlencode }}&{% endif %}page={{ number }}">
+                        {{ number }}
+                    </a>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <a href="?{% if query %}query={{ query|urlencode }}&search_type={{ search_type|urlencode }}&{% endif %}page={{ page_obj.next_page_number }}">
+                    &rsaquo;
+                </a>
+            {% else %}
+                <span class="disabled">&rsaquo;</span>
+            {% endif %}
+        </nav>
+        {% endif %}
+    {% else %}
+        <div class="empty-state">
+            <div class="empty-icon" aria-hidden="true">⌕</div>
+            <h3>No properties found</h3>
+            <p>
+                Try another search or return to the homepage.
+            </p>
+            <p>
+                <a
+                    class="button button-outline"
+                    href="{% url 'properties:home' %}"
+                >
+                    Back to homepage
+                </a>
+            </p>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

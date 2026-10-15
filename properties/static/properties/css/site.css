@@ -125,3 +125,57 @@ button, input, select { font: inherit; }
     .footer-brand { grid-column: 1 / -1; }
     .site-footer { margin-top: 43px; padding-top: 34px; }
 }
+
+
+.breadcrumbs {
+    margin: 0 0 18px;
+    color: var(--muted);
+    font-size: 13px;
+}
+
+.breadcrumbs a {
+    color: var(--primary);
+    font-weight: 650;
+}
+
+.listing-heading {
+    margin-bottom: 24px;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin: 36px 0 10px;
+}
+
+.pagination a,
+.pagination span {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    min-width: 42px;
+    height: 42px;
+    padding: 0 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--card);
+    color: var(--primary);
+    font-weight: 650;
+}
+
+.pagination a:hover {
+    border-color: var(--primary);
+}
+
+.pagination .current {
+    color: white;
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+.pagination .disabled {
+    opacity: 0.4;
+}
